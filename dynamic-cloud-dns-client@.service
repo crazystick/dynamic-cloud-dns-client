@@ -1,0 +1,12 @@
+[Unit]
+Description=Dynamic DNS Client for Google Cloud DNS for %i
+After=network.target
+
+[Service]
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=/etc/dynamic_cloud_dns_client_%i
+ExecStart=/usr/bin/python /usr/local/bin/dynamic_cloud_dns_client.py
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
