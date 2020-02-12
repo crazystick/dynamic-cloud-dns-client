@@ -10,63 +10,63 @@ IPIFY4 = 'https://api.ipify.org?format=json'
 IPIFY6 = 'https://api6.ipify.org?format=json'
 
 def get_ipv4():
-	r = requests.get(IPIFY4)
-	r.raise_for_status()
-	return r.json()['ip']
+    r = requests.get(IPIFY4)
+    r.raise_for_status()
+    return r.json()['ip']
 
 def get_ipv6():
-	r = requests.get(IPIFY6)
-	r.raise_for_status()
-	return r.json()['ip']
+    r = requests.get(IPIFY6)
+    r.raise_for_status()
+    return r.json()['ip']
 
 def update_cloud_dns(ipv4=None, ipv6=None):
-	if ipv4 is None and ipv6 is None:
-		raise ValueError("No valid IP addresses given")
+    if ipv4 is None and ipv6 is None:
+        raise ValueError("No valid IP addresses given")
 
-	data = {'token': os.environ['DCDNS_TOKEN'], 'host': os.environ['DCDNS_HOST']}
+    data = {'token': os.environ['DCDNS_TOKEN'], 'host': os.environ['DCDNS_HOST']}
 
-	if ipv4 is not None:
-		data['ipv4'] = ipv4
+    if ipv4 is not None:
+        data['ipv4'] = ipv4
 
-	if ipv6 is not None:
-		data['ipv6'] = ipv6
+    if ipv6 is not None:
+        data['ipv6'] = ipv6
 
-	r = requests.post(os.environ['DCDNS_FUNCTION_URL'], data=data)
+    r = requests.post(os.environ['DCDNS_FUNCTION_URL'], data=data)
 
-	r.raise_for_status()
+    r.raise_for_status()
 
-	logger.info("IP addresses updated: IPv4={} IPv6={}".format(ipv4, ipv6))
+    logger.info("IP addresses updated: IPv4={} IPv6={}".format(ipv4, ipv6))
 
 
 if __name__ == "__main__":
-	current_ipv4 = None
-	current_ipv6 = None
+    current_ipv4 = None
+    current_ipv6 = None
 
-	while True:
-		try:
-			ipv4 = get_ipv4()
-			if ipv4 == current_ipv4:
-				ipv4 = None
-			else:
-				current_ipv4 = ipv4
-		except requests.exceptions.HTTPError:
-			ipv4 = None
+    while True:
+        try:
+            ipv4 = get_ipv4()
+            if ipv4 == current_ipv4:
+                ipv4 = None
+            else:
+                current_ipv4 = ipv4
+        except requests.exceptions.HTTPError:
+            ipv4 = None
 
-		try:	
-			ipv6 = get_ipv6()
-			if ipv6 == current_ipv6:
-				ipv6 = None
-			else:
-				current_ipv6 = ipv6
-		except requests.exceptions.HTTPError:
-			ipv6 = None	
+        try:    
+            ipv6 = get_ipv6()
+            if ipv6 == current_ipv6:
+                ipv6 = None
+            else:
+                current_ipv6 = ipv6
+        except requests.exceptions.HTTPError:
+            ipv6 = None 
 
-		try:
-			update_cloud_dns(ipv4=ipv4, ipv6 = ipv6)
-		except ValueError:
-			logger.info("No IP address updates")
-		except requests.exceptions.HTTPError as err:
-			logger.exception(err)
+        try:
+            update_cloud_dns(ipv4=ipv4, ipv6 = ipv6)
+        except ValueError:
+            logger.info("No IP address updates")
+        except requests.exceptions.HTTPError as err:
+            logger.exception(err)
 
-		sleep(int(os.environ['DCDNS_FREQUENCY']))
+        sleep(int(os.environ['DCDNS_FREQUENCY']))
 
