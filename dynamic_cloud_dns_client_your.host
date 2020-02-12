@@ -1,8 +1,8 @@
 # the DNS hostname to update, e.g. your.host.com
-DCDNS_HOST=
+DCDNS_HOST=test.example.com
 # the URL of your deployed cloud function
-DCDNS_FUNCTION_URL=
+DCDNS_FUNCTION_URL=https://us-central1-<project-name>.cloudfunctions.net/updateHost
 # the token you created in the settings file of the cloud function
-DCDNS_TOKEN=
+DCDNS_TOKEN=<secretToken>
 # the frequency in seconds to check for IP address changes
-DCDNS_FREQUENCY=
+DCDNS_FREQUENCY=300
