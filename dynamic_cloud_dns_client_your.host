@@ -1,3 +1,5 @@
+# the Cloud DNS zone to update
+DCDNS_ZONE=example-com
 # the DNS hostname to update, e.g. your.host.com
 DCDNS_HOST=test.example.com
 # the URL of your deployed cloud function

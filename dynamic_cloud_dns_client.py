@@ -25,6 +25,9 @@ def update_cloud_dns(ipv4=None, ipv6=None):
 
     data = {'token': os.environ['DCDNS_TOKEN'], 'host': os.environ['DCDNS_HOST']}
 
+    if 'DCDNS_ZONE' in os.environ:
+        data['zone'] = os.environ['DCDNS_ZONE']
+
     if ipv4 is not None:
         data['ipv4'] = ipv4
 
