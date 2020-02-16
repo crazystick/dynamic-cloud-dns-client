@@ -44,6 +44,8 @@ def update_cloud_dns(ipv4=None, ipv6=None):
 if __name__ == "__main__":
     current_ipv4 = None
     current_ipv6 = None
+    ipv4 = None
+    ipv6 = None
 
     while True:
         if os.environ['DCDNS_IPV4'] == 'YES':
@@ -67,7 +69,7 @@ if __name__ == "__main__":
                 ipv6 = None
 
         try:
-            update_cloud_dns(ipv4=ipv4, ipv6 = ipv6)
+            update_cloud_dns(ipv4=ipv4, ipv6=ipv6)
         except ValueError:
             logger.info("No IP address updates")
         except requests.exceptions.HTTPError as err:
