@@ -46,7 +46,7 @@ if __name__ == "__main__":
     current_ipv6 = None
 
     while True:
-        if os.environ(['DCDNS_IPV4']) == 'YES':
+        if os.environ['DCDNS_IPV4'] == 'YES':
             try:
                 ipv4 = get_ipv4()
                 if ipv4 == current_ipv4:
@@ -56,7 +56,7 @@ if __name__ == "__main__":
             except requests.exceptions.HTTPError:
                 ipv4 = None
 
-        if os.environ(['DCDNS_IPV6']) == 'YES':
+        if os.environ['DCDNS_IPV6'] == 'YES':
             try:
                 ipv6 = get_ipv6()
                 if ipv6 == current_ipv6:
