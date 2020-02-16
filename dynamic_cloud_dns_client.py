@@ -43,23 +43,25 @@ if __name__ == "__main__":
     current_ipv6 = None
 
     while True:
-        try:
-            ipv4 = get_ipv4()
-            if ipv4 == current_ipv4:
+        if os.environ(['DCDNS_IPV4']) == 'YES':
+            try:
+                ipv4 = get_ipv4()
+                if ipv4 == current_ipv4:
+                    ipv4 = None
+                else:
+                    current_ipv4 = ipv4
+            except requests.exceptions.HTTPError:
                 ipv4 = None
-            else:
-                current_ipv4 = ipv4
-        except requests.exceptions.HTTPError:
-            ipv4 = None
 
-        try:    
-            ipv6 = get_ipv6()
-            if ipv6 == current_ipv6:
+        if os.environ(['DCDNS_IPV6']) == 'YES':
+            try:
+                ipv6 = get_ipv6()
+                if ipv6 == current_ipv6:
+                    ipv6 = None
+                else:
+                    current_ipv6 = ipv6
+            except requests.exceptions.HTTPError:
                 ipv6 = None
-            else:
-                current_ipv6 = ipv6
-        except requests.exceptions.HTTPError:
-            ipv6 = None 
 
         try:
             update_cloud_dns(ipv4=ipv4, ipv6 = ipv6)

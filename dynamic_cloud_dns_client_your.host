@@ -6,3 +6,7 @@ DCDNS_FUNCTION_URL=https://us-central1-<project-name>.cloudfunctions.net/updateH
 DCDNS_TOKEN=<secretToken>
 # the frequency in seconds to check for IP address changes
 DCDNS_FREQUENCY=300
+# update ipv4 address
+DCDNS_IPV4=YES
+# update ipv6 address
+DCDNS_IPV6=YES
