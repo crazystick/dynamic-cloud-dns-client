@@ -17,7 +17,6 @@ RETRIES = 5
                        requests.exceptions.ConnectionError),
                       max_tries=RETRIES)
 def get_ipv4():
-    logger.debug("call ipv4")
     r = requests.get(IPIFY4)
     r.raise_for_status()
     return r.json()['ip']
@@ -57,7 +56,7 @@ def do_update(current_ipv4, current_ipv6):
     ipv4 = None
     ipv6 = None
     retries = 1
-    
+
     if os.environ['DCDNS_IPV4'] == 'YES':
         try:
             ipv4 = get_ipv4()
