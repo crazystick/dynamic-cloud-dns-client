@@ -4,6 +4,14 @@ This is a simple client for the [Dynamic Cloud DNS](https://github.com/srueg/dyn
 
 Designed to run under Linux systemd, it consists of a small Python script, which uses the [ipify](https://www.ipify.org/) API to retrieve the current IP and if the IP address has changed, calls the cloud function configured as per the instructions for Dynamic Cloud DNS.
 
+## Prerequisites
+
+Needs Python 3, requests and backoff
+
+```
+pip3 install -r requirements.txt
+```
+
 ## Setup
 
  * Copy `dynamic_cloud_dns_client.py` to `/usr/local/bin`
@@ -11,6 +19,18 @@ Designed to run under Linux systemd, it consists of a small Python script, which
  * Copy `dynamic_cloud_dns_client_your.host` to `/etc` (replace *your.host* with your actual hostname)
  * Edit `dynamic_cloud_dns_client_your.host` and fill in the environment variables
  * Enable and start your service: `systemctl enable dynamic_cloud_dns_client@your.host.service`
+
+## Testing
+
+Probably a good idea to do this in a virtualenv:
+
+```
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+pip install -t test-requirements.txt
+pytest
+```
 
 ## License
 
