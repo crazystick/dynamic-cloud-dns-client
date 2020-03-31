@@ -13,6 +13,7 @@ IPIFY6 = 'https://api6.ipify.org/?format=json'
 
 RETRIES = 5
 
+
 @backoff.on_exception(backoff.expo,
                       (requests.exceptions.Timeout,
                        requests.exceptions.ConnectionError),
@@ -22,6 +23,7 @@ def get_ipv4():
     r.raise_for_status()
     return r.json()['ip']
 
+
 @backoff.on_exception(backoff.expo,
                       (requests.exceptions.Timeout,
                        requests.exceptions.ConnectionError),
@@ -30,6 +32,7 @@ def get_ipv6():
     r = requests.get(IPIFY6)
     r.raise_for_status()
     return r.json()['ip']
+
 
 def update_cloud_dns(ipv4=None, ipv6=None):
     if ipv4 is None and ipv6 is None:
@@ -55,19 +58,21 @@ def update_cloud_dns(ipv4=None, ipv6=None):
 
 def valid_ipv4(ip):
     try:
-        #IPv4
+        # IPv4
         socket.inet_pton(socket.AF_INET, ip)
         return True
     except OSError:
         return False
 
+
 def valid_ipv6(ip):
     try:
-        #IPv6
+        # IPv6
         socket.inet_pton(socket.AF_INET6, ip)
         return True
     except OSError:
         return False
+
 
 def do_update(current_ipv4, current_ipv6):
     ipv4 = None
