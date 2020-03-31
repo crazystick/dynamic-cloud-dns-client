@@ -139,7 +139,7 @@ def test_main_does_update(env_vars, requests_mock):
 
 def test_main_single_retry(env_vars, requests_mock):
     # given
-    requests_mock.get(IPIFY4, [{'exc': requests.exceptions.ConnectTimeout},{'json': {'ip': '1.2.3.4'}}])
+    requests_mock.get(IPIFY4, [{'exc': requests.exceptions.ConnectTimeout}, {'json': {'ip': '1.2.3.4'}}])
     requests_mock.get(IPIFY6, json={'ip': '2001:0db8:9999:0000:0000:8a2e:0370:7334'})
     requests_mock.post("https://cloudfunctions.net.mock/updateHost")
 

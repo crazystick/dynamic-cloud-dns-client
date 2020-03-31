@@ -77,7 +77,6 @@ def valid_ipv6(ip):
 def do_update(current_ipv4, current_ipv6):
     ipv4 = None
     ipv6 = None
-    retries = 1
 
     if os.environ['DCDNS_IPV4'] == 'YES':
         try:
@@ -91,7 +90,7 @@ def do_update(current_ipv4, current_ipv6):
                 logger.warning("received invalid IPv4 addr: {}".format(ipv4))
                 ipv4 = None
         except (requests.exceptions.Timeout,
-            requests.exceptions.ConnectionError):
+                requests.exceptions.ConnectionError):
             ipv4 = None
         except requests.exceptions.HTTPError as err:
             logger.exception(err)
@@ -108,7 +107,7 @@ def do_update(current_ipv4, current_ipv6):
                 logger.warning("received invalid IPv6 addr: {}".format(ipv6))
                 ipv6 = None
         except (requests.exceptions.Timeout,
-            requests.exceptions.ConnectionError):
+                requests.exceptions.ConnectionError):
             ipv6 = None
         except requests.exceptions.HTTPError as err:
             logger.exception(err)

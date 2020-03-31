@@ -4,7 +4,7 @@ This is a simple client for the [Dynamic Cloud DNS](https://github.com/srueg/dyn
 
 Designed to run under Linux systemd, it consists of a small Python script, which uses the [ipify](https://www.ipify.org/) API to retrieve the current IP and if the IP address has changed, calls the cloud function configured as per the instructions for Dynamic Cloud DNS.
 
-![Build Status](https://github.com/crazystick/dynamic-cloud-dns-client/workflows/Python%20application/badge.svg)
+![Build Status](https://github.com/crazystick/dynamic-cloud-dns-client/workflows/Build/badge.svg)
 
 ## Prerequisites
 
