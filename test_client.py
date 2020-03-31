@@ -179,3 +179,41 @@ def test_main_max_retry(env_vars, requests_mock):
     assert requests_mock.request_history[7].url == IPIFY6
     assert requests_mock.request_history[8].url == IPIFY6
     assert requests_mock.request_history[9].url == IPIFY6
+
+def test_main_invalid_ipv4(env_vars, requests_mock):
+    # given
+    requests_mock.get(IPIFY4, json={'ip': '999.999.999.999'})
+    requests_mock.get(IPIFY6, json={'ip': '2001:0db8:0000:0000:0000:8a2e:0370:7334'})
+    requests_mock.post("https://cloudfunctions.net.mock/updateHost")
+
+    # when
+    ipv4, ipv6 = do_update('0.0.0.0', '2001:0db8:0000:0000:0000:1234:1234:1234')
+
+    # then
+    assert ipv4 == '0.0.0.0'
+    assert ipv6 == '2001:0db8:0000:0000:0000:8a2e:0370:7334'
+    assert requests_mock.call_count == 3
+    assert requests_mock.request_history[0].url == IPIFY4
+    assert requests_mock.request_history[1].url == IPIFY6
+    posted_data = parse_qs(requests_mock.request_history[2].text)
+    assert 'ipv4' not in posted_data
+    assert posted_data['ipv6'][0] == ipv6
+
+def test_main_invalid_ipv6(env_vars, requests_mock):
+    # given
+    requests_mock.get(IPIFY4, json={'ip': '123.123.123.123'})
+    requests_mock.get(IPIFY6, json={'ip': '123.123.123.123'})
+    requests_mock.post("https://cloudfunctions.net.mock/updateHost")
+
+    # when
+    ipv4, ipv6 = do_update('0.0.0.0', '2001:0db8:0000:0000:0000:1234:1234:1234')
+
+    # then
+    assert ipv4 == '123.123.123.123'
+    assert ipv6 == '2001:0db8:0000:0000:0000:1234:1234:1234'
+    assert requests_mock.call_count == 3
+    assert requests_mock.request_history[0].url == IPIFY4
+    assert requests_mock.request_history[1].url == IPIFY6
+    posted_data = parse_qs(requests_mock.request_history[2].text)
+    assert posted_data['ipv4'][0] == ipv4
+    assert 'ipv6' not in posted_data

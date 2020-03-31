@@ -3,9 +3,10 @@ from time import sleep
 import logging
 import os
 import backoff
+import socket
 
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG, format='%(levelname)-8s %(name)-25s %(message)s')
+logger = logging.getLogger('dynamic_cloud_dns_client')
 
 IPIFY4 = 'https://api.ipify.org/?format=json'
 IPIFY6 = 'https://api6.ipify.org/?format=json'
@@ -52,6 +53,22 @@ def update_cloud_dns(ipv4=None, ipv6=None):
     logger.info("IP addresses updated: IPv4={} IPv6={}".format(ipv4, ipv6))
 
 
+def valid_ipv4(ip):
+    try:
+        #IPv4
+        socket.inet_pton(socket.AF_INET, ip)
+        return True
+    except OSError:
+        return False
+
+def valid_ipv6(ip):
+    try:
+        #IPv6
+        socket.inet_pton(socket.AF_INET6, ip)
+        return True
+    except OSError:
+        return False
+
 def do_update(current_ipv4, current_ipv6):
     ipv4 = None
     ipv6 = None
@@ -60,10 +77,14 @@ def do_update(current_ipv4, current_ipv6):
     if os.environ['DCDNS_IPV4'] == 'YES':
         try:
             ipv4 = get_ipv4()
-            if ipv4 == current_ipv4:
-                ipv4 = None
+            if valid_ipv4(ipv4):
+                if ipv4 == current_ipv4:
+                    ipv4 = None
+                else:
+                    current_ipv4 = ipv4
             else:
-                current_ipv4 = ipv4
+                logger.warning("received invalid IPv4 addr: {}".format(ipv4))
+                ipv4 = None
         except (requests.exceptions.Timeout,
             requests.exceptions.ConnectionError):
             ipv4 = None
@@ -73,10 +94,14 @@ def do_update(current_ipv4, current_ipv6):
     if os.environ['DCDNS_IPV6'] == 'YES':
         try:
             ipv6 = get_ipv6()
-            if ipv6 == current_ipv6:
-                ipv6 = None
+            if valid_ipv6(ipv6):
+                if ipv6 == current_ipv6:
+                    ipv6 = None
+                else:
+                    current_ipv6 = ipv6
             else:
-                current_ipv6 = ipv6
+                logger.warning("received invalid IPv6 addr: {}".format(ipv6))
+                ipv6 = None
         except (requests.exceptions.Timeout,
             requests.exceptions.ConnectionError):
             ipv6 = None
