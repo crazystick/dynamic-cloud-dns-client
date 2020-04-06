@@ -19,7 +19,7 @@ RETRIES = 5
                        requests.exceptions.ConnectionError),
                       max_tries=RETRIES)
 def get_ipv4():
-    r = requests.get(IPIFY4)
+    r = requests.get(IPIFY4, timeout=10)
     r.raise_for_status()
     return r.json()['ip']
 
@@ -29,7 +29,7 @@ def get_ipv4():
                        requests.exceptions.ConnectionError),
                       max_tries=RETRIES)
 def get_ipv6():
-    r = requests.get(IPIFY6)
+    r = requests.get(IPIFY6, timeout=10)
     r.raise_for_status()
     return r.json()['ip']
 
